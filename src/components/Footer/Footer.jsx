@@ -1,9 +1,16 @@
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import CopyrightIcon from '@mui/icons-material/Copyright';
+
 export default function Footer() {
   return (
-    <>
-      <footer>
-        <p>&copy; 2023</p>
-      </footer>
-    </>
+    <BottomNavigation>
+      <BottomNavigationAction
+        label='Copyright'
+        icon={<CopyrightIcon />}
+        showLabel={true}
+      />
+      =
+    </BottomNavigation>
   );
 }
