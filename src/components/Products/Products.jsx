@@ -3,14 +3,14 @@ import productSlice from '../../store/products';
 
 export default function Products() {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.product.productData);
+  const products = useSelector((state) => state.product.productData.products);
   return (
     <>
       <h1>Products</h1>
       <ul>
         {Array.isArray(products) &&
           products.map((product) => (
-            <li key={product._id}>
+            <li key={product.price}>
               <button
                 onClick={() => {
                   dispatch(
