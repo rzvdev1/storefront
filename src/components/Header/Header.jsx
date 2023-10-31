@@ -1,7 +1,24 @@
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
 export default function Header() {
   return (
-    <>
-      <h1>React App</h1>
-    </>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position='static'>
+        <Toolbar>
+          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+            Store Front
+          </Typography>
+          <Button color='inherit'>
+            Cart
+            <ShoppingCartIcon style={{ padding: 5 }} />
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }
