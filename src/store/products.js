@@ -19,6 +19,16 @@ const productSlice = createSlice({
     setCategories: (state, action) => {
       state.categories = action.payload;
     },
+    setActiveCategory: (state, action) => {
+      state.categories = state.categories.map((category) => {
+        if (category.id === action.payload) {
+          category.active = true;
+        } else {
+          category.active = false;
+        }
+        return category;
+      });
+    },
   },
 });
 
