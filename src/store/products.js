@@ -16,9 +16,6 @@ const productSlice = createSlice({
     setPriceCount: (state, action) => {
       state.price = action.payload;
     },
-    setCategories: (state, action) => {
-      state.categories = action.payload;
-    },
     setActiveCategory: (state, action) => {
       state.categories = state.categories.map((category) => {
         if (category.id === action.payload) {

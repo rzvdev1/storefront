@@ -1,30 +1,24 @@
-import { useDispatch, useSelector } from 'react-redux';
-import productSlice from '../../store/products';
+import List from '@mui/material/List';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
 
-export default function Products() {
-  const dispatch = useDispatch();
-  const products = useSelector((state) => state.product.productData.products);
+export default function Products({ selectedCategory, products }) {
+  // Filter products based on the selected category
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+
   return (
     <>
-      <h1>Products</h1>
-      <ul>
-        {Array.isArray(products) &&
-          products.map((product) => (
-            <li key={product.price}>
-              <button
-                onClick={() => {
-                  dispatch(
-                    productSlice.actions.setActiveCategory(product.name)
-                  );
-                }}
-              >
-                {product.name}
-                {product.displayName}
-                {product.description}
-              </button>
-            </li>
-          ))}
-      </ul>
+      <h2>Products</h2>
+      <List>
+        {filteredProducts.map((product) => (
+          <ListItemText key={product.price}>
+            <ListItem>{product.name}</ListItem>
+            <ListItem>{product.description}</ListItem>
+          </ListItemText>
+        ))}
+      </List>
     </>
   );
 }
