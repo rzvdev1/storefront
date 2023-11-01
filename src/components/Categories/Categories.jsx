@@ -1,46 +1,44 @@
-import { useDispatch, useSelector } from 'react-redux';
-import productSlice from '../../store/products';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import Products from '../Products/Products';
+import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
 
 export default function Categories() {
-  const dispatch = useDispatch();
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const categories = useSelector(
     (state) => state.product.productData.categories
   );
+  const products = useSelector((state) => state.product.productData.products);
 
-  const clickCategory = (e) => {
-    e.preventDefault();
-
-    if (e.target.textContent === 'Food')
-      console.log(
-        dispatch(productSlice.actions.setActiveCategory(e.target.textContent))
-      );
-
-    if (e.target.textContent === 'Electronics')
-      console.log(
-        dispatch(productSlice.actions.setActiveCategory(e.target.textContent))
-      );
-
-    if (e.target.textContent === 'Clothing')
-      console.log(
-        dispatch(productSlice.actions.setActiveCategory(e.target.textContent))
-      );
+  const selectCategory = (categoryName) => {
+    setSelectedCategory(categoryName);
   };
 
   return (
     <>
       <h1>Categories</h1>
 
-      <ul>
-        {Array.isArray(categories) &&
-          categories.map((category) => (
-            <li key={category._id}>
-              <button onClick={clickCategory}>
-                {category.displayName}
-                {category.description}
-              </button>
-            </li>
-          ))}
-      </ul>
+      {Array.isArray(categories) &&
+        categories.map((category) => (
+          <ListItem key={category._id}>
+            <Button
+              variant='outlined'
+              onClick={() => selectCategory(category.name)}
+            >
+              {category.displayName}
+              {category.description}
+            </Button>
+          </ListItem>
+        ))}
+
+      <ListItem>
+        <Button variant='outlined' onClick={() => selectCategory(null)}>
+          All Products
+        </Button>
+      </ListItem>
+      <Products selectedCategory={selectedCategory} products={products} />
     </>
   );
 }
