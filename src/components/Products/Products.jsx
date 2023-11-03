@@ -4,9 +4,15 @@ import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import SimpleCart from '../SimpleCart/SimpleCart';
+import cartSlice from '../../store/cart';
+import { useDispatch, useSelector } from 'react-redux';
+console.log(cartSlice);
 
 export default function Products({ selectedCategory, products }) {
-  // Filter products based on the selected category
+  const dispatch = useDispatch();
+  const cartItemsAdded = useSelector((state) => state.cart.caddToCart);
+  console.log(cartItemsAdded);
+
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)
     : products;
@@ -14,6 +20,8 @@ export default function Products({ selectedCategory, products }) {
   const click = (e) => {
     e.preventDefault();
     console.log('item added to cart');
+    dispatch(cartSlice.actions.addToCart());
+
     return <SimpleCart />;
   };
 
