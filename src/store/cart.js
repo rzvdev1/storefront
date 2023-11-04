@@ -11,6 +11,12 @@ const cartSlice = createSlice({
       state.cartData.push(action.payload);
       state.cartCount = state.cartData.length;
     },
+    deleteFromCart: (state, action) => {
+      state.cartData = state.cartData.filter(
+        (item) => item.id !== action.payload.id
+      );
+      state.cartCount = state.cartData.length;
+    },
   },
 });
 
