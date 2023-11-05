@@ -1,11 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { deleteFromCart } from '../../store/cart';
 import Modal from '@mui/material/Modal';
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import cartSlice from '../../store/cart';
-import { useEffect } from 'react';
 
 const style = {
   position: 'absolute',
@@ -24,62 +23,46 @@ export default function SimpleCart() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const cart = useSelector((state) => state.cart.cartCount);
   const dispatch = useDispatch();
-  const cartItemsAdded = useSelector((state) => state.cart.caddToCart);
+  const cart = useSelector((state) => state.cart.cartCount);
+  const cartData = useSelector((state) => state.cart.cartData);
 
-  const handleDelete = (id) => {
-    console.log('delete item');
-    console.log(id);
-    dispatch(cartSlice.actions.deleteFromCart);
+  const itemRemove = (product) => {
+    console.log('item removed from cart', product.name);
+    dispatch(deleteFromCart(product));
+    console.log(dispatch(deleteFromCart(product)));
   };
-
-  useEffect(() => {
-    if (cartItemsAdded) dispatch(cartSlice.actions.addToCart());
-  }, [cartItemsAdded]);
 
   return (
     <>
-      <h2>{cart}</h2>
-      <div>
-        <Button style={{ color: 'black' }} onClick={handleOpen}>
-          View Items
-        </Button>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
-        >
-          <Box sx={style}>
-            <Typography id='modal-modal-title' variant='h6' component='h2'>
-              Your shopping cart:
-            </Typography>
-            <Typography
-              id='modal-modal-description'
-              variant='h6'
-              component='h2'
-            >
-              {Array.isArray(cartItemsAdded) ? (
-                cartItemsAdded.map(
-                  (item) =>
-                    item && (
-                      <div key={item.name}>
-                        <p>{item.name}</p>
-                        <p>{item.price}</p>
-                        <Button onClick={() => handleDelete(item.id)}>
-                          Delete
-                        </Button>
-                      </div>
-                    )
-                )
-              ) : (
-                <p>Nothing in cart</p>
-              )}
-            </Typography>
-          </Box>
-        </Modal>
-      </div>
+      <h2> {cart}</h2>
+      <Button style={{ color: 'white' }} onClick={handleOpen}>
+        View Cart
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+      >
+        <Box sx={style}>
+          <Typography id='modal-modal-title' variant='h6' component='h2'>
+            Cart Items ({cart})
+          </Typography>
+          <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+            {cartData.map((product) => (
+              <div key={product.price}>
+                <Typography>{product.name}</Typography>
+                <Typography>{product.description}</Typography>
+                <Typography>${product.price}</Typography>
+                <Button onClick={() => itemRemove(product)}>
+                  Remove From Cart
+                </Button>
+              </div>
+            ))}
+          </Typography>
+        </Box>
+      </Modal>
     </>
   );
 }
