@@ -1,25 +1,22 @@
+import ListItem from '@mui/material/ListItem';
+import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import Products from '../Products/Products';
-import Button from '@mui/material/Button';
-import ListItem from '@mui/material/ListItem';
 
 export default function Categories() {
+  const categories = useSelector((state) => state.product.categories);
+  const products = useSelector((state) => state.product.products);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const categories = useSelector(
-    (state) => state.product.productData.categories
-  );
-  const products = useSelector((state) => state.product.productData.products);
-
   const selectCategory = (categoryName) => {
+    console.log('category selected');
     setSelectedCategory(categoryName);
   };
 
   return (
     <>
-      <h1>Categories</h1>
-
+      <h2>Categories</h2>
       {Array.isArray(categories) &&
         categories.map((category) => (
           <ListItem key={category._id}>
