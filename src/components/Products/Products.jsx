@@ -3,8 +3,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../store/cart';
+import { v4 as uuidv4 } from 'uuid';
+import { useEffect } from 'react';
+import { getProducts } from '../../store/products';
 
 export default function Products({ selectedCategory, products }) {
   const dispatch = useDispatch();
@@ -12,17 +15,30 @@ export default function Products({ selectedCategory, products }) {
     ? products.filter((product) => product.category === selectedCategory)
     : products;
 
+  const API_products = useSelector((state) => state.product.products);
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  const API_updateProducts = useSelector((state) => state.product.products);
+
   const click = (product) => {
     console.log('item added to cart', product.name);
-    dispatch(addToCart(product));
+    // Add a unique id to the product
+    const productWithId = {
+      ...product,
+      id: uuidv4(),
+    };
+    dispatch(addToCart(productWithId));
   };
 
   return (
     <>
       <h2>Products</h2>
       <List>
-        {filteredProducts.map((product) => (
-          <ListItem key={product.price}>
+        {API_products.map((product) => (
+          <ListItem key={product._id}>
             <ListItemText>{product.name}</ListItemText>
             <ListItemText>{product.description}</ListItemText>
             <ListItemText>${product.price}</ListItemText>
@@ -34,7 +50,21 @@ export default function Products({ selectedCategory, products }) {
               </Button>
             </ButtonGroup>
           </ListItem>
-        ))}
+        )) &&
+          filteredProducts.map((product) => (
+            <ListItem key={product._id}>
+              <ListItemText>{product.name}</ListItemText>
+              <ListItemText>{product.description}</ListItemText>
+              <ListItemText>${product.price}</ListItemText>
+              <ListItemText>In Stock: {product.inStock}</ListItemText>
+
+              <ButtonGroup>
+                <Button variant='outlined' onClick={() => click(product)}>
+                  Add to Cart
+                </Button>
+              </ButtonGroup>
+            </ListItem>
+          ))}
       </List>
     </>
   );

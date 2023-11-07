@@ -1,4 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+const url = import.meta.env.VITE_API_URL;
+
+export const getProducts = createAsyncThunk('GET/products', async () => {
+  const response = await fetch(`${url}/products`);
+  const data = await response.json();
+  return data.results;
+});
 
 let initialState = {
   categories: [
@@ -17,6 +24,23 @@ let initialState = {
   ],
   activeCategory: '',
 };
+
+export const updateProducts = createAsyncThunk(
+  'PUT/products:id',
+  async (products) => {
+    const updateProduct = { products };
+
+    const response = await fetch(`${url}/products/${products._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateProduct),
+    });
+    const data = await response.json();
+    return data;
+  }
+);
 
 const productSlice = createSlice({
   name: 'product',
@@ -38,6 +62,19 @@ const productSlice = createSlice({
         return category;
       });
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getProducts.fulfilled, (state, action) => {
+        state.products = action.payload;
+      })
+      .addCase(updateProducts.fulfilled, (state, action) => {
+        // No need to find and update the product in the array
+        // You can directly replace it with the updated product
+        state.products = state.products.map((product) =>
+          product._id === action.payload._id ? action.payload : product
+        );
+      });
   },
 });
 
