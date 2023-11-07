@@ -1,6 +1,6 @@
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import Products from '../Products/Products';
 

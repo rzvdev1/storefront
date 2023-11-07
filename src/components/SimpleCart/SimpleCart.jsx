@@ -5,6 +5,8 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { v4 as uuidv4 } from 'uuid';
+import { addToCart } from '../../store/cart';
 
 const style = {
   position: 'absolute',
@@ -33,6 +35,21 @@ export default function SimpleCart() {
     console.log(dispatch(deleteFromCart(product)));
   };
 
+  const API_updateProducts = useSelector((state) => state.product.products);
+
+  const itemUpdate = (product) => {
+    console.log('item was updated from cart');
+    console.log('item stock was add by 1');
+    console.log(API_updateProducts.map((product) => product.inStock + 1));
+    const productWithId = {
+      ...product,
+      id: uuidv4(),
+    };
+    dispatch(addToCart(productWithId));
+    console.log('item stock was remove by 1');
+    console.log(API_updateProducts.map((product) => product.inStock - 1));
+  };
+
   return (
     <>
       <h2> {cart}</h2>
@@ -58,9 +75,13 @@ export default function SimpleCart() {
                 <Button onClick={() => itemRemove(product)}>
                   Remove From Cart
                 </Button>
+                <Button onClick={() => itemUpdate(product)}>
+                  Update Cart By 1
+                </Button>
               </div>
             ))}
           </Typography>
+          <Button onClick={() => console.log('checkout')}>Checkout</Button>
         </Box>
       </Modal>
     </>
