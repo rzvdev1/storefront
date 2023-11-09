@@ -41,6 +41,14 @@ export const updateProducts = createAsyncThunk(
     return data;
   }
 );
+export const getProductDetails = createAsyncThunk(
+  'GET/productDetails',
+  async (productId) => {
+    const response = await fetch(`${url}/products/${productId}`);
+    const data = await response.json();
+    return data;
+  }
+);
 
 const productSlice = createSlice({
   name: 'product',
@@ -74,6 +82,9 @@ const productSlice = createSlice({
         state.products = state.products.map((product) =>
           product._id === action.payload._id ? action.payload : product
         );
+      })
+      .addCase(getProductDetails.fulfilled, (state, action) => {
+        state.productDetails = action.payload;
       });
   },
 });
