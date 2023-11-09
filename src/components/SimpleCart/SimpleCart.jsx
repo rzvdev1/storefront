@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { v4 as uuidv4 } from 'uuid';
 import { addToCart } from '../../store/cart';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -22,6 +23,7 @@ const style = {
 };
 
 export default function SimpleCart() {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -81,7 +83,7 @@ export default function SimpleCart() {
               </div>
             ))}
           </Typography>
-          <Button onClick={() => console.log('checkout')}>Checkout</Button>
+          <Button onClick={() => navigate('/cart')}>Checkout</Button>
         </Box>
       </Modal>
     </>

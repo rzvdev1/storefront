@@ -8,8 +8,11 @@ import { addToCart } from '../../store/cart';
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect } from 'react';
 import { getProducts } from '../../store/products';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Products({ selectedCategory, products }) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)
@@ -45,6 +48,10 @@ export default function Products({ selectedCategory, products }) {
             <ListItemText>In Stock: {product.inStock}</ListItemText>
 
             <ButtonGroup>
+              <Button variant='outlined'>
+                <Link to={`/productDetails/${product._id}`}>View Details</Link>
+                View Details
+              </Button>
               <Button variant='outlined' onClick={() => click(product)}>
                 Add to Cart
               </Button>
@@ -59,6 +66,11 @@ export default function Products({ selectedCategory, products }) {
               <ListItemText>In Stock: {product.inStock}</ListItemText>
 
               <ButtonGroup>
+                <Button variant='outlined'>
+                  <Link to={`/productDetails/${product._id}`}>
+                    View Details
+                  </Link>
+                </Button>
                 <Button variant='outlined' onClick={() => click(product)}>
                   Add to Cart
                 </Button>
